@@ -4,6 +4,7 @@ export default class Game extends Phaser.Scene {
 
     private player?: Phaser.GameObjects.Sprite
     private boxes?: Phaser.GameObjects.Sprite[] = []
+    private layer?: Phaser.Tilemaps.TilemapLayer
 
     private cursors?: Phaser.Types.Input.Keyboard.CursorKeys
 
@@ -47,16 +48,18 @@ export default class Game extends Phaser.Scene {
         if (!tileset) {
             throw new Error("Tileset não encontrado")
         }
+        
+        const layer = map.createLayer(0, tileset, 0, 0); //não ceita null
+        if (!layer) throw new Error("Não foi possível criar a layer");
+        this.layer = layer;
 
-        const layer = map.createLayer(0, tileset, 0, 0) //não ceita null
-
-        this.player = layer?.createFromTiles(52, 0, { key: 'tiles', frame: 52 }).pop()
+        this.player = this.layer?.createFromTiles(52, 0, { key: 'tiles', frame: 52 }).pop()
 
         //this.add.sprite(288, 224, 'tiles', 52)
 
         this.createPlayerAnims()
 
-        this.boxes = layer?.createFromTiles(8, 0, { key: 'tiles', frame: 8 })
+        this.boxes = this.layer?.createFromTiles(8, 0, { key: 'tiles', frame: 8 })
 
 
     }
@@ -72,7 +75,11 @@ export default class Game extends Phaser.Scene {
         const justDown = Phaser.Input.Keyboard.JustDown(this.cursors.down!)
 
         if (justLeft) {
-            const box = this.getBoxAt(this.player.x - 64, this.player.y) //ver o que tem na posição para onde o player está indo por isso -32
+            const nx = this.player.x - 64
+            const ny = this.player.y
+
+            //const box = this.getBoxAt(this.player.x - 64, this.player.y) //ver o que tem na posição para onde o player está indo por isso -64
+        
             //console.dir(box)
 
             const baseTween = {
@@ -80,44 +87,47 @@ export default class Game extends Phaser.Scene {
                 duration: 500
             }
 
-            this.tweenMove(box, baseTween, () => {
+            this.tweenMove(nx, ny, baseTween, () => {
                 this.player?.anims.play('left', true)
             })
 
         }
         else if (justRight) {
-            const box = this.getBoxAt(this.player.x + 64, this.player.y)
+            const nx = this.player.x + 64
+            const ny = this.player.y
 
             const baseTween = {
                 x: '+=64',
                 duration: 500
             }
 
-            this.tweenMove(box, baseTween, () => {
+            this.tweenMove(nx, ny, baseTween, () => {
                 this.player?.anims.play('right', true)
             })
         }
         else if (justUp) {
-            const box = this.getBoxAt(this.player.x, this.player.y - 64)
+            const nx = this.player.x 
+            const ny = this.player.y - 64
 
             const baseTween = {
                 y: '-=64',
                 duration: 500
             }
 
-            this.tweenMove(box, baseTween, () => {
+            this.tweenMove(nx, ny, baseTween, () => {
                 this.player?.anims.play('up', true)
             })
         }
         else if (justDown) {
-            const box = this.getBoxAt(this.player.x, this.player.y + 64)
+            const nx = this.player.x 
+            const ny = this.player.y + 64
 
             const baseTween = {
                 y: '+=64',
                 duration: 500
             }
 
-            this.tweenMove(box, baseTween, () => {
+            this.tweenMove(nx, ny, baseTween, () => {
                 this.player?.anims.play('down', true)
             })
         }
@@ -129,7 +139,28 @@ export default class Game extends Phaser.Scene {
         }*/
     }
 
-    private tweenMove(box: Phaser.GameObjects.Sprite | undefined, baseTween: any, onStart: () => void) {
+    private hasWallAt(x: number, y: number) {
+        if(!this.layer){
+            return undefined
+        }
+        const tile = this.layer.getTileAtWorldXY(x, y) //pega o tile que está na posição (x, y) no mundo.
+        if(!tile){ // se não tiver tile nessa posição retorna false
+            return false
+        }
+        return tile.index === 100 // tile 100 é uma parede, retorna true se for uma parede ou false caso contrário
+    }
+
+    private tweenMove(x: number, y: number, baseTween: any, onStart: () => void) {
+        if(this.tweens.isTweening(this.player!)){ //se o player já estiver se movendo, não faz nada
+            return
+        }
+        const hasWall = this.hasWallAt(x, y)
+
+        if(hasWall){
+                return
+        }
+
+        const box = this.getBoxAt(x, y)
         if (box) {
             this.tweens.add(Object.assign({}, baseTween, { targets: box })) 
         }
@@ -141,7 +172,7 @@ export default class Game extends Phaser.Scene {
                 // força idle depois da animação
                 this.stopPlayerAnimation()
             }
-        }));
+        }))
     }
 
     private stopPlayerAnimation() {
