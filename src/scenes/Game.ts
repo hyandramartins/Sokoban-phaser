@@ -12,10 +12,12 @@ export default class Game extends Phaser.Scene {
     private boxesByColor: { [key: number]: Phaser.GameObjects.Sprite[] } = {} //caixas e suas cores
 
     private cursors?: Phaser.Types.Input.Keyboard.CursorKeys
+    protected levelData: number[][] = []
+    protected nextLevelName: string = ''
 
-    constructor() {
-        console.log("scene criada")
-        super('teste')
+    constructor(key: string = 'teste') {
+        super(key) 
+        console.log(`Scene ${key} criada`)
     }
 
     preload() {
@@ -63,6 +65,8 @@ export default class Game extends Phaser.Scene {
             floorLayer.setDepth(-1);
         }
             */
+
+        /*
         const level = [
             [100, 100, 100, 100, 100, 100, 100, 100],
             [100, 0, 0, 0, 0, 0, 52, 100],
@@ -79,6 +83,26 @@ export default class Game extends Phaser.Scene {
             tileWidth: 64,
             tileHeight: 64
         })
+            */
+
+        if (this.levelData.length === 0) {
+            this.levelData = [
+                [100, 100, 100, 100, 100, 100, 100, 100],
+                [100, 0, 0, 0, 0, 0, 52, 100],
+                [100, 6, 7, 8, 9, 10, 0, 100],
+                [100, 25, 38, 51, 64, 77, 0, 100],
+                [100, 0, 0, 0, 0, 0, 0, 100],
+                [100, 0, 0, 0, 0, 0, 0, 100],
+                [100, 0, 0, 0, 0, 0, 0, 100],
+                [100, 100, 100, 100, 100, 100, 100, 100],
+            ]
+        }
+
+        const map = this.make.tilemap({
+            data: this.levelData,
+            tileWidth: 64,
+            tileHeight: 64
+        })
 
         const tileset = map.addTilesetImage('tiles')
 
@@ -86,7 +110,7 @@ export default class Game extends Phaser.Scene {
             throw new Error("Tileset não encontrado")
         }
 
-        const layer = map.createLayer(0, tileset, 0, 0); //não ceita null
+        const layer = map.createLayer(0, tileset, 50, 50); //não ceita null
         if (!layer) throw new Error("Não foi possível criar a layer");
         this.layer = layer;
 
@@ -99,6 +123,28 @@ export default class Game extends Phaser.Scene {
         //this.blueBoxes = this.layer?.createFromTiles(8, 0, { key: 'tiles', frame: 8 })
         this.extractBoxes(this.layer)
 
+        //texto que serve de botão
+        const nextButton = this.add.text(50, 50, 'Click --> proxima fase', {
+            fontSize: '24px',
+            color: '#000',          
+            fontStyle: 'bold',
+            backgroundColor: '#c70a0a',
+            padding: { x: 10, y: 5 }
+        })
+        nextButton.setInteractive({ useHandCursor: true })
+
+        // Quando clicar, para a cena atual e começa a próxima fase
+
+        if (!this.nextLevelName) {
+            this.nextLevelName = 'level2'
+        }
+        nextButton.on('pointerdown', () => {
+            if (this.nextLevelName) {
+                this.scene.start(this.nextLevelName)
+            } else {
+                console.log('Fim do jogo ou próxima fase não definida!')
+            }
+        })
     }
 
     update() {
