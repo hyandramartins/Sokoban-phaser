@@ -1,6 +1,6 @@
 import Phaser from 'phaser'
-import * as Colors from '../boxesAndTargets/Colors'
-import Level from './Level'
+import * as Colors from '../data/Colors'
+import Level from '../core/Level'
 import TargetManager from './TargetManager'
 
 type BoxData = {

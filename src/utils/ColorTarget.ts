@@ -1,4 +1,4 @@
-import * as Color from '../boxesAndTargets/Colors'
+import * as Color from '../data/Colors'
 
 const boxColorToTargetColor = (boxColor: number) => {
     switch (boxColor) {

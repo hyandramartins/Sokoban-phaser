@@ -1,7 +1,7 @@
 import Phaser from 'phaser'
-import Player from './Player'
+import Player from '../entities/Player'
 import Level from './Level'
-import BoxManager from './BoxManager'
+import BoxManager from '../entities/BoxManager'
 
 export default class MovementController {
 

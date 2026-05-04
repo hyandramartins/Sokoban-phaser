@@ -1,11 +1,11 @@
 import Phaser from 'phaser'
-import * as Colors from '../boxesAndTargets/Colors'
+import * as Colors from '../data/Colors'
 import { boxColorToTargetColor } from '../utils/ColorTarget'
-import Level from './Level'
-import BoxManager from './BoxManager'
-import Player from './Player'
-import TargetManager from './TargetManager'
-import MovementController from './MovementController'
+import Level from '../core/Level'
+import BoxManager from '../entities/BoxManager'
+import Player from '../entities/Player'
+import TargetManager from '../entities/TargetManager'
+import MovementController from '../core/MovementController'
 
 export default class Game extends Phaser.Scene {
 
