@@ -1,7 +1,7 @@
 import Phaser from 'phaser'
 import Game from './scenes/Game'
+import Level1 from './scenes/Level1'
 import Level2 from './scenes/Level2'
-import Level3 from './scenes/Level3'
 
 const config = {
 	type: Phaser.AUTO,
@@ -17,7 +17,7 @@ const config = {
 			gravity: { x: 0, y: 0 }
 		}
 	},
-	scene: [Game, Level2, Level3]
+	scene: [Level1, Level2]
 }
 
 export default new Phaser.Game(config) 

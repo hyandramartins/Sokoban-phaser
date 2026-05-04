@@ -1,0 +1,35 @@
+import Phaser from 'phaser'
+import Player from './Player'
+import Level from './Level'
+import BoxManager from './BoxManager'
+
+export default class MovementController {
+
+    constructor(
+        private scene: Phaser.Scene,
+        private player: Player,
+        private level: Level,
+        private boxes: BoxManager
+    ) {}
+
+    tryMove(dx: number, dy: number, anim: string) {
+        const nx = this.player.x + dx
+        const ny = this.player.y + dy
+
+        // parede bloqueia
+        if (this.level.hasWallAt(nx, ny)) {
+            return
+        }
+
+        // checa caixa
+        const boxData = this.boxes.getBoxDataAt(nx, ny)
+
+        if (boxData) {
+            const moved = this.boxes.tryPushBox(boxData, dx, dy)
+            if (!moved) return
+        }
+
+        // move player
+        this.player.move(this.scene, dx, dy, anim)
+    }
+}
