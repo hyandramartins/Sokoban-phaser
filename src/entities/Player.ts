@@ -3,7 +3,6 @@ import Phaser from 'phaser'
 export default class Player {
 
     private sprite: Phaser.GameObjects.Sprite
-    private isMoving: boolean = false
 
     constructor(
         scene: Phaser.Scene,
@@ -33,12 +32,7 @@ export default class Player {
         return this.sprite.y
     }
 
-    move(scene: Phaser.Scene, dx: number, dy: number, anim: string) {
-
-        // trava movimento enquanto está andando
-        if (this.isMoving) return
-
-        this.isMoving = true
+    move(scene: Phaser.Scene, dx: number, dy: number, anim: string, afterMove?: () => void) {
 
         scene.tweens.add({
             targets: this.sprite,
@@ -50,7 +44,7 @@ export default class Player {
             },
             onComplete: () => {
                 this.stopAnimation()
-                this.isMoving = false // libera movimento
+                afterMove?.() // libera movimento
             }
         })
     }

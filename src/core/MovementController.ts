@@ -12,7 +12,12 @@ export default class MovementController {
         private boxes: BoxManager,
     ) { }
 
+    private isMoving = false
+
     tryMove(dx: number, dy: number, anim: string) {
+
+        if (this.isMoving) return // espera a animação de movimento atual terminar
+
         const nx = this.player.x + dx
         const ny = this.player.y + dy
 
@@ -28,9 +33,11 @@ export default class MovementController {
             const moved = this.boxes.tryPushBox(boxData, dx, dy)
             if (!moved) return
         }
-
+        this.isMoving = true
         // move player
-        this.player.move(this.scene, dx, dy, anim)
+        this.player.move(this.scene, dx, dy, anim, () => {
+            this.isMoving = false // libera só quando terminar
+        })
 
     }
 }
