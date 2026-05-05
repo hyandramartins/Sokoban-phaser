@@ -9,8 +9,8 @@ export default class MovementController {
         private scene: Phaser.Scene,
         private player: Player,
         private level: Level,
-        private boxes: BoxManager
-    ) {}
+        private boxes: BoxManager,
+    ) { }
 
     tryMove(dx: number, dy: number, anim: string) {
         const nx = this.player.x + dx
@@ -31,5 +31,6 @@ export default class MovementController {
 
         // move player
         this.player.move(this.scene, dx, dy, anim)
+
     }
 }

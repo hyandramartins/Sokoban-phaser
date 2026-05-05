@@ -1,13 +1,41 @@
 import Phaser from 'phaser'
 import { boxColorToTargetColor } from '../utils/ColorTarget'
+import * as Colors from '../data/Colors'
 
 export default class TargetManager {
 
     private layer: Phaser.Tilemaps.TilemapLayer
     private coveredByColor: { [key: number]: number } = {}
+    private totalTargetsByColor: { [key: number]: number } = {}
 
     constructor(layer: Phaser.Tilemaps.TilemapLayer) {
         this.layer = layer
+
+        const boxColors = [
+            Colors.BoxOrange,
+            Colors.BoxRed,
+            Colors.BoxBlue,
+            Colors.BoxGreen,
+            Colors.BoxGrey
+        ]
+
+        this.layer.forEachTile(tile => {
+            const index = tile.index
+
+            for (let i = 0; i < boxColors.length; i++) {
+                const targetColor = boxColorToTargetColor(boxColors[i])
+
+                if (index === targetColor) {
+                    if (!(targetColor in this.totalTargetsByColor)) {
+                        this.totalTargetsByColor[targetColor] = 0
+                    }
+
+                    this.totalTargetsByColor[targetColor]++
+                }
+            }
+        })
+
+        console.log("Total de alvos:", this.totalTargetsByColor)
     }
 
     isOnTarget(x: number, y: number, boxColor: number): boolean {
@@ -34,5 +62,22 @@ export default class TargetManager {
         this.coveredByColor[targetColor] += change
 
         console.log(this.coveredByColor)
+    }
+
+    isCompleted(): boolean {
+        const colors = Object.keys(this.totalTargetsByColor)
+
+        for (let i = 0; i < colors.length; i++) {
+            const color = Number(colors[i])
+
+            const total = this.totalTargetsByColor[color]
+            const covered = this.coveredByColor[color] || 0
+
+            if (covered < total) {
+                return false
+            }
+        }
+
+        return true
     }
 }

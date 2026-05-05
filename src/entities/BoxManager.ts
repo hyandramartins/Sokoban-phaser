@@ -16,7 +16,8 @@ export default class BoxManager {
         private scene: Phaser.Scene,
         private layer: Phaser.Tilemaps.TilemapLayer,
         private level: Level,
-        private targets: TargetManager
+        private targets: TargetManager,
+        private onWin: () => void
     ) {
         const boxColors = [
             Colors.BoxOrange,
@@ -96,6 +97,13 @@ export default class BoxManager {
                         boxData.color,
                         1
                     )
+                }
+                if (this.targets.isCompleted()) {
+                    console.log("VENCEU!")
+
+                    this.scene.time.delayedCall(300, () => {
+                        this.onWin() 
+                    })
                 }
             }
         })

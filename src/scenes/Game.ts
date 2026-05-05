@@ -117,7 +117,10 @@ export default class Game extends Phaser.Scene {
             this,
             layer,
             this.level,
-            this.targets
+            this.targets,
+            () => {
+                this.scene.start(this.nextLevelName)
+            }
         )
 
         this.movement = new MovementController(
