@@ -89,7 +89,7 @@ export default class BoxManager {
             duration: 500,
             onComplete: () => {
 
-                // entrou no alvo
+                // Entrou no alvo
                 if (this.targets.isOnTarget(box.x, box.y, boxData.color)) {
                     this.targets.updateTargetState(
                         box.x,
@@ -98,11 +98,22 @@ export default class BoxManager {
                         1
                     )
                 }
+                
+                // VERIFICA SE TODAS AS CAIXAS ESTÃO NOS ALVOS
                 if (this.targets.isCompleted()) {
-                    console.log("VENCEU!")
+                    console.log("TODAS CAIXAS NO ALVO! FASE CONCLUÍDA.")
 
-                    this.scene.time.delayedCall(300, () => {
-                        this.onWin() 
+                    // 1. Pausa o jogo atual
+                    this.scene.scene.pause();
+                    
+                    // 2. Chama a cena do desafio e envia o nome da fase (para o desafio saber para onde voltar)
+                    this.scene.scene.launch('ChallengeScene', { parentScene: this.scene.scene.key });
+
+                    // 3. Fica à espera: quando o jogador acertar a conta e o desafio fechar, ele avança de fase
+                    this.scene.events.once('resume', () => {
+                        this.scene.time.delayedCall(300, () => {
+                            this.onWin() 
+                        })
                     })
                 }
             }
