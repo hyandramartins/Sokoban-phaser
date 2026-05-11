@@ -20,7 +20,7 @@ export default class Level1 extends Game {
 
         this.nextLevelName = 'level2'
 
-        //Chama o create da mãe, que agora usará o mapa acima
+   
         super.create() 
     }
 }
