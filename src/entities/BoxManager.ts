@@ -86,7 +86,7 @@ export default class BoxManager {
             targets: box,
             x: nextX,
             y: nextY,
-            duration: 500,
+            duration: 300,
             onComplete: () => {
 
                 // Entrou no alvo

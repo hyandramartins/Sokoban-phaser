@@ -3,6 +3,7 @@ import BootScene from './scenes/BootScene'
 import IntroScene from './scenes/IntroScene'
 import Level1 from './scenes/Level1'
 import Level2 from './scenes/Level2'
+import Level3 from './scenes/Level3'
 import ChallengeScene from './scenes/ChallengeScene'
 // A importação do 'Game' foi removida, pois não estava a ser usada no array de cenas original.
 
@@ -21,7 +22,7 @@ const config = {
         }
     },
     // A ordem importa: primeiro o clique, depois o vídeo, depois a primeira fase
-    scene: [BootScene, IntroScene, Level1, Level2, ChallengeScene]
+    scene: [BootScene, IntroScene, Level1, Level2, Level3, ChallengeScene]
 }
 
 export default new Phaser.Game(config)

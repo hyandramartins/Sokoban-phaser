@@ -38,7 +38,7 @@ export default class Player {
             targets: this.sprite,
             x: this.sprite.x + dx,
             y: this.sprite.y + dy,
-            duration: 500,
+            duration: 300,
             onStart: () => {
                 this.sprite.anims.play(anim, true)
             },

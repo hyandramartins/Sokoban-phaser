@@ -18,6 +18,7 @@ export default class Game extends Phaser.Scene {
 
     private cursors?: Phaser.Types.Input.Keyboard.CursorKeys
     protected levelData: number[][] = []
+    protected levelFloor: number[][] = []
     protected nextLevelName: string = ''
 
     constructor(key: string = 'teste') { //key é o nome da cena, que é usado para referenciar ela (ex: para mudar de cena, a gente usa esse nome)
@@ -34,8 +35,8 @@ export default class Game extends Phaser.Scene {
     }
 
     create() {
-        if (!this.levelData) {
-            throw new Error("levelData não definido na fase")
+        if (!this.levelData || !this.levelFloor) {
+            throw new Error("levelData ou levelFloor não definido na fase")
         }
 
         if (this.input.keyboard) {
@@ -106,7 +107,7 @@ export default class Game extends Phaser.Scene {
             ]
         }*/
 
-        this.level = new Level(this, this.levelData)
+        this.level = new Level(this, this.levelData, this.levelFloor)
         const layer = this.level.getLayer()
 
         this.player = new Player(this, layer)

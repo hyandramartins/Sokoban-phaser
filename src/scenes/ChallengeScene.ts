@@ -66,7 +66,7 @@ export default class ChallengeScene extends Phaser.Scene {
         const errorText = this.add.text(width / 2, height / 2 + 100, 'Resposta incorreta. Tente novamente!', { color: '#cc0000', fontSize: '14px', fontStyle: 'bold' }).setOrigin(0.5).setVisible(false);
 
 
-        this.input.keyboard.on('keydown', (event: KeyboardEvent) => {
+        this.input.keyboard!.on('keydown', (event: KeyboardEvent) => {
             if (event.key === 'Backspace') {
                 this.answer = this.answer.slice(0, -1);
             } else if (event.key === 'Enter') {

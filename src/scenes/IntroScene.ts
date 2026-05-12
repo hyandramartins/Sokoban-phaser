@@ -38,7 +38,7 @@ export default class IntroScene extends Phaser.Scene {
             padding: { x: 10, y: 5 }
         }).setOrigin(0.5);
 
-        this.input.keyboard.once('keydown-SPACE', () => {
+        this.input.keyboard!.once('keydown-SPACE', () => {
             video.stop();
             this.scene.start('level1');
         });
