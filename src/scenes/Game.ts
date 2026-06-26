@@ -132,11 +132,11 @@ export default class Game extends Phaser.Scene {
         )
 
         //texto que serve de botão
-        const nextButton = this.add.text(50, 50, 'Click --> proxima fase', {
+        const nextButton = this.add.text(1, 50, '➜', {
             fontSize: '24px',
             color: '#000',
             fontStyle: 'bold',
-            backgroundColor: '#c70a0a',
+            backgroundColor: '#3498db',
             padding: { x: 10, y: 5 }
         })
         nextButton.setInteractive({ useHandCursor: true })
@@ -148,6 +148,19 @@ export default class Game extends Phaser.Scene {
                 this.scene.start(this.nextLevelName)
             }
         })
+        const restartButton = this.add.text(1, 100, '↺', {
+            fontSize: '24px',
+            color: '#000',
+            fontStyle: 'bold',
+            backgroundColor: '#2ecc71',
+            padding: { x: 10, y: 5 }
+        });
+
+        restartButton.setInteractive({ useHandCursor: true });
+
+        restartButton.on('pointerdown', () => {
+            this.scene.restart();
+        });
     }
 
     update() {
