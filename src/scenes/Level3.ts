@@ -21,7 +21,9 @@ export default class Level3 extends Game {
             row.map(() => 90)
         )
 
-        this.nextLevelName = ''
+        // Aqui você coloca o nome exato que registrou no super() da cena do vídeo
+        this.nextLevelName = 'trailer_final' 
+        
         super.create()
     }
 }
